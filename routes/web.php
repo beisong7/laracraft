@@ -135,7 +135,7 @@ Route::group(['middleware'=>'monitor'], function () {
     Route::post('start-order-payment', 'Payment\RaveController@initialize')->name('pay');
     //backend payment completion
 //    Route::post('rave/callback', 'Payment\RaveController@callback')->name('callback');
-    Route::get('rave/callback', 'Payment\RaveController@callback')->name('callback');
+    Route::post('rave/callback', 'Payment\RaveController@callback')->name('callback');
 
 
     Route::get('booking/payment', 'BookingController@startPayment')->name('payment.startup');

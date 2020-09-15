@@ -14,6 +14,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    'support_email' => env('SITE_EMAIL', 'dev@laracrafttoys.com'),
 
     /*
     |--------------------------------------------------------------------------

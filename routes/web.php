@@ -26,7 +26,11 @@ Route::group(['middleware'=>'admin'], function () {
         Route::get('page/{uuid}/publish', 'PageController@publish')->name('page.publish');
         Route::get('page/{uuid}/un-publish', 'PageController@unpublish')->name('page.unpublished');
 
+        //product routes
         Route::get('product/{uuid}/pop', 'ProductController@pop')->name('product.pop');
+        Route::post('product/add/attribute/{uuid}', 'ProductController@addAttribute')->name('product.add.attribute');
+
+        //Blog routes
         Route::get('blog/{uuid}/pop', 'BlogController@pop')->name('blog.pop');
         Route::get('blog/{blog}/toggle', 'BlogController@toggle')->name('blog.toggle');
         Route::get('content/{uuid}/pop', 'ContentController@pop')->name('content.pop');
@@ -128,9 +132,9 @@ Route::group(['middleware'=>'monitor'], function () {
     Route::get('/start-order-payment', function (){
         return redirect()->route('cart');
     });
-    Route::post('/start-order-payment', 'Payment\RaveController@initialize')->name('pay');
+    Route::post('start-order-payment', 'Payment\RaveController@initialize')->name('pay');
     //backend payment completion
-    Route::post('/rave/callback', 'Payment\RaveController@callback')->name('callback');
+    Route::post('rave/callback', 'Payment\RaveController@callback')->name('callback');
 
 
     Route::get('booking/payment', 'BookingController@startPayment')->name('payment.startup');

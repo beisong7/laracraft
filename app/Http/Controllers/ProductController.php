@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Color;
+use App\Models\ColorSet;
 use App\Models\Maker;
 use App\Models\Product;
+use App\Models\Size;
+use App\Models\SizeSet;
 use App\Traits\General\Utility;
+use App\Traits\General\Uuid;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -14,6 +19,7 @@ use Illuminate\Support\Str;
 
 class ProductController extends MyController
 {
+    use Uuid;
     /**
      * Display a listing of the resource.
      *
@@ -603,5 +609,61 @@ class ProductController extends MyController
             ->with('keyword', $keyword)
             ->with('shown', $shown)
             ->with('products', $products);
+    }
+
+    public function addAttribute(Request $request, $uuid){
+
+        //check logic
+        $product = Product::where('uuid', $uuid)->first();
+        if(empty($product)){
+            return back()->withErrors(['Unable to complete']);
+        }
+        $type = $request->input('type');
+        if(empty($type)){
+            return back()->withErrors(['Unable to complete']);
+        }
+
+        if($type==='size'){
+
+            $size = new Size();
+            $size->uuid = $this->setUuid();
+            $size->name = $request->input('a_title');
+            $size->measure = $request->input('a_value');
+            $size->save();
+
+            $size_set = new SizeSet();
+            $size_set->uuid = $this->setUuid();
+            $size_set->size_id = $size->uuid;
+            $size_set->product_id = $product->uuid;
+            $size_set->qty = 0; //set number of quantity available
+            $size_set->current = true;
+            $size_set->save();
+
+            return back()->withMessage(ucwords($type). " attribute added to ". $product->name);
+        }elseif ($type==='color'){
+
+            $color = new Color();
+            $color->uuid = $this->setUuid();
+            $color->name = $request->input('a_title');
+            $color->result = $request->input('a_color');
+            $color->save();
+
+            $color_set = new ColorSet();
+            $color_set->uuid = $this->setUuid();
+            $color_set->color_id = $color->uuid;
+            $color_set->product_id = $product->uuid;
+            $color_set->qty = 0;
+            $color_set->current = true;
+            $color_set->save();
+
+            return back()->withMessage(ucwords($type). " attribute added to ". $product->name);
+        }else{
+            return back()->withErrors(['Unable to complete']);
+        }
+
+        //business logic
+
+
+
     }
 }

@@ -48,6 +48,7 @@ class RaveController extends Controller
      */
     public function callback(Request $request)
     {
+        dd($request);
 
         $data = Rave::verifyTransaction(request()->txref);
 

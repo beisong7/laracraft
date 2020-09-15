@@ -59,7 +59,7 @@ $title = "Products ";
                                     {!! $product->details !!}
                                 </p>
                             </div>
-                            @if(!empty($product->colors))
+                            @if($product->colors->count() > 0)
                                 <div class="color pr1 pro-v4">
                                     <h4>Color</h4>
                                     <ul>
@@ -72,15 +72,13 @@ $title = "Products ";
                                 </div>
                             @endif
 
-                            @if(!empty($product->sizes))
-                                <div class="size shop5 pro-1 pro-v4">
+                            @if($product->sizes->count() > 0)
+                                <div class="size shop5 pro-1 pro-v4" style="display: block">
                                     <h4>Size</h4>
                                     <ul>
-                                        <li><a class="st-xs" href="#">XS</a></li>
-                                        <li><a href="">S</a></li>
-                                        <li><a href="">M</a></li>
-                                        <li><a href="">L</a></li>
-                                        <li><a class="st-xl" href="">XL</a></li>
+                                        @foreach($product->sizes as $size)
+                                            <li class=""><a class="" href="#">{{ $size->info->measure }}</a></li>
+                                        @endforeach
                                     </ul>
                                 </div>
                             @endif

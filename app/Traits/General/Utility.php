@@ -21,8 +21,4 @@ trait Utility{
     public function generateId(){
         return (string)Str::uuid();
     }
-
-    public function setUuid(){
-        return $this->generateId();
-    }
 }

@@ -109,15 +109,4 @@ class PaymentService
         return json_decode($response, true);
     }
 
-    /**
-     * Get a payment details from the database using the txref
-     *
-     * @param  string  $txref
-     * @return mixed
-     */
-    public function getRecord($txref)
-    {
-        return $this->paymentRepository->find($txref);
-    }
-
 }

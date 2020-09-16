@@ -19,7 +19,7 @@ class CreatePaymentsTable extends Migration
             $table->string('uuid')->nullable();
             $table->string('reference')->nullable();
             $table->string('email')->nullable();
-            $table->uuid('order_id')->nullable();
+            $table->string('order_id')->nullable();
             $table->bigInteger('kobo')->nullable();
             $table->text('details')->nullable(); // logs for the payment from start to finish
             $table->boolean('success')->nullable(); //true or false

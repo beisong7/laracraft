@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
+use App\Traits\Email\MailCart;
 use Illuminate\Http\Request;
 
 class MessageController extends MyController
 {
+    use MailCart;
     /**
      * Display a listing of the resource.
      *
@@ -115,5 +117,9 @@ class MessageController extends MyController
     public function destroy(Message $message)
     {
         //
+    }
+
+    public function testEmail($name){
+        return $this->testName($name);
     }
 }

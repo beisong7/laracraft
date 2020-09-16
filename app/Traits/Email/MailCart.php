@@ -6,7 +6,7 @@ use App\Services\EmailServices;
 
 trait MailCart{
 
-    protected $emailService;
+    public $emailService;
 
     function __construct(EmailServices $services)
     {
@@ -105,8 +105,8 @@ trait MailCart{
         $this->emailService->sendEmail();
     }
 
-    public function testName(){
-        $named = $this->emailService->aname = "Benjamin";
-        dd($named);
+    public function testName($name){
+        $named = $this->emailService->aname = $name;
+        return $named;
     }
 }

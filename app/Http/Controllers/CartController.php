@@ -38,9 +38,8 @@ class CartController extends MyController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $payment_id)
     {
-
         $name = $request->input('full_name');
         $phone = $request->input('phone');
         $email = $request->input('email');
@@ -52,9 +51,11 @@ class CartController extends MyController
         $booking->handled = false;
         $booking->replied = false;
         $booking->email = $email;
+
         if(Auth::guard('customer')->check()){
             $booking->customer_id = Auth::guard('customer')->user()->uuid;
         }
+
         $booking->phone = $phone;
         $booking->name = $name;
         $booking->uuid = $this->generateId('BK', 25);
@@ -62,6 +63,7 @@ class CartController extends MyController
 
         //register customer if empty
         $customer = Customer::where('email', $email)->first();
+
         if(empty($customer)){
 //            $customer = new Customer();
 //            $customer->email = $email;

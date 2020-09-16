@@ -189,6 +189,9 @@ Route::group(['middleware'=>'monitor'], function () {
 
         Route::get('review-view', 'CustomerActionController@viewReview')->name('customer.reviews');
     });
+
+    //payment completion route
+    Route::get('complete/payment/{tranx}', 'PaymentController@finTran')->name('payment.complete');
 });
 
 
@@ -197,6 +200,8 @@ Route::get('artisans/db/{name}', 'ArtisanController@seed');
 
 Route::get('my-session', 'ProductController@testSession');
 Route::get('my-session/empty', 'ProductController@flushSession');
+
+Route::get('test-email/{name}', 'MessageController@testEmail');
 
 
 

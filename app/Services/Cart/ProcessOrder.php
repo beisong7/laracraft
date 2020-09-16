@@ -1,38 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Services\Cart;
 
-// use PDF;
 use App\Models\Booking;
 use App\Models\Cart;
 use App\Models\Customer;
-use App\Models\Payment;
-use App\Models\Transaction;
 use App\Traits\Email\MailCart;
-use App\Traits\General\Uuid;
-use Illuminate\Http\Request;
+use App\Traits\General\Utility;
 use Illuminate\Support\Facades\Auth;
 
+class ProcessOrder{
+    use Utility, MailCart;
 
-class PaymentController extends Controller
-{
-    use Uuid, MailCart;
-    public function finTran(Request $request, $tran_id){
-        //find the transaction,
-        $tranx = Transaction::where('uuid', $tran_id)->first();
-        if(empty($tranx)){
-           return redirect()->route('cart')->withErrors(['Unable to complete request.']);
-        }
-
-        //find the associated payment
-        $payment = Payment::where('uuid', $tranx->payment_id)->first();
-        if(empty($payment)){
-            return redirect()->route('cart')->withErrors(['Unable to complete request.']);
-        }
-
-        return $this->handleOrder($tranx, $payment);
-
-    }
+    protected $emailMirror;
 
     public function handleOrder($transaction, $payment){
 
@@ -52,7 +32,7 @@ class PaymentController extends Controller
 
         $booking->phone = $phone;
         $booking->name = $name;
-        $booking->uuid = "BK-".$this->setUuid();
+        $booking->uuid = $this->getId('BK', 25);
         $booking->save();
 
         $payment->order_id = $booking->uuid;
@@ -99,6 +79,8 @@ class PaymentController extends Controller
 //                    $this->productOrderMail($email, $booking);
             }
 
+
+
             $authCustomer = Auth::guard('customer')->user();
             if(!empty($authCustomer)){
                 return redirect()->route('cart')->withMessage('Your order has been completed successfully. Check your email for details.');
@@ -119,19 +101,4 @@ class PaymentController extends Controller
         return redirect()->route('cart')->withErrors(['Your cart might me empty. Contact us if you just made a payment.']);
 
     }
-
-    /**
-     * Print payment receipt
-     *
-     * @param  string  $txref
-     * @return \Illuminate\Http\Response
-     */
-    /*public function printReceipt($txref)
-    {
-        $payment = $this->paymentService->getRecord($txref);
-        $pdf = PDF::loadView('emails.transactionals.payment_receipt', compact('payment'));
-        $fileName =  str_slug(strtolower(config('app.name') . ' receipt ' . time())) . '.pdf';
-        return $pdf->download($fileName);
-    }*/
-
 }

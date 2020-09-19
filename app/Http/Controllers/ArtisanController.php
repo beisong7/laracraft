@@ -22,6 +22,16 @@ class ArtisanController extends Controller
             }
 
         }
+
+        if($action==="optimize:clear"){
+            try{
+                Artisan::call("$action");
+                return ["$action completed"];
+            }catch (\Exception $e){
+                return ['failed - '.$e->getMessage()];
+            }
+
+        }
         return ["unknown call"];
     }
 

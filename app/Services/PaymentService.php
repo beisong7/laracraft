@@ -17,7 +17,7 @@ class PaymentService
      */
     public function formatPayload(Request $request)
     {
-        dd($this->getRedirectUrl());
+//        dd($this->getRedirectUrl());
         $payload = [
             'customer_firstname' => $request->input('firstname'),
             'customer_lastname' => $request->input('lastname'),

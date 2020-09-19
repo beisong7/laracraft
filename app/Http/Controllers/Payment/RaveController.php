@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers\Payment;
 
-use App\Models\Booking;
-use App\Models\Cart;
-use App\Models\Customer;
 use App\Models\Payment;
 use App\Models\Transaction;
 use App\Services\PaymentService;

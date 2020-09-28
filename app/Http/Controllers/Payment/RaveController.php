@@ -127,13 +127,20 @@ class RaveController extends Controller
                         $trUpdate['details'] = "Payment for $amount completed at ".date('F d, y : h:i:s', time()).". ";
                         $tranx->update($trUpdate);
 
-                        $payment = new Payment();
-                        $payment->uuid = $paymentId;
-                        $payment->email = $tranx->email;
-                        $payment->success = true;
-                        $payment->amount = $amount;
-                        $payment->status = 'success';
-                        $payment->save();
+                        Payment::create([
+                            'uuid' => $paymentId,
+                            'email' => $tranx->email,
+                            'success' => true,
+                            'amount' => $amount,
+                            'status' => 'success',
+                        ]);
+//                        $payment = new Payment();
+//                        $payment->uuid = $paymentId;
+//                        $payment->email = $tranx->email;
+//                        $payment->success = true;
+//                        $payment->amount = $amount;
+//                        $payment->status = 'success';
+//                        $payment->save();
 
                         return redirect()->route('payment.complete', $tranx->uuid);
 

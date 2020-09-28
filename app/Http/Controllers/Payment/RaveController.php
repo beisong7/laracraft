@@ -138,21 +138,21 @@ class RaveController extends Controller
                         if(!empty($payment)){
                             return redirect()->route('payment.complete', $tranx->uuid);
                         }else{
-                            return redirect()->route('cart')->with(['error' => 'Transaction not found! Please, contact us.']);
+                            return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
                         }
                     }
 
-                    return redirect()->route('cart')->with(['error' => 'Transaction not found! Please, contact us.']);
+                    return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
 
                 }else{
-                    return redirect()->route('cart')->with(['error' => 'Transaction not found! Please, contact us.']);
+                    return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
                 }
             }
 
-            return redirect()->route('cart')->with(['error' => 'Transaction not found! Please, contact us.']);
+            return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
 
         }catch (\Exception $e){
-            return redirect()->route('cart')->with(['error' => 'Could not complete transaction! if you have made payment, contact us with your transaction reference.']);
+            return redirect()->route('cart')->withErrors(['Could not complete transaction! if you have made payment, contact us with your transaction reference.']);
         }
     }
 }

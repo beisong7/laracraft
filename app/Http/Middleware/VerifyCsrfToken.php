@@ -24,6 +24,7 @@ class VerifyCsrfToken extends Middleware
         'cms/post/slider/store/*',
         'cms/post/slider/delete/*',
         'rave/callback',
+        'public/rave/callback',
         'laracraft/public/rave/callback'
     ];
 }

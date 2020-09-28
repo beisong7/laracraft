@@ -117,7 +117,7 @@ class RaveController extends Controller
 
                 if (($response['data']['chargecode'] == "00" || $response['data']['chargecode'] == "0") && ($response['data']['amount'] == $tranx->amount)){
 
-                    return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
+                    return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us test.']);
 
 //                    if ($tranx->status === strtolower('attempting')) {
 //                        $paymentId = $this->setUuid();

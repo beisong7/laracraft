@@ -97,17 +97,21 @@ class RaveController extends Controller
 
     public function verify($encryption){
 
-        return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
+        try{
+            $ref = decrypt($encryption);
 
-//        try{
-//            $ref = decrypt($encryption);
-//
-//            $tranx = Transaction::where('txref', $ref)->first();
-//
-//            if(!empty($tranx)){
-//                $response = $this->paymentService->guzzle($ref);
-//
-//                // If user cancels the transaction or something wrong happened.
+            $tranx = Transaction::where('txref', $ref)->first();
+
+            if(!empty($tranx)){
+                $response = $this->paymentService->guzzle($ref);
+
+                return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
+
+                /**
+                 * If user cancels the transaction or something wrong happened.
+                */
+
+
 //                if ($response['status'] == 'error') {
 //                    return redirect()->route('cart')->with(['error' => 'Could not complete transaction! if you have made payment, contact us with your transaction reference.']);
 //                }
@@ -150,12 +154,12 @@ class RaveController extends Controller
 //                }else{
 //                    return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
 //                }
-//            }
-//
-//            return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
-//
-//        }catch (\Exception $e){
-//            return redirect()->route('cart')->withErrors(['Could not complete transaction! if you have made payment, contact us with your transaction reference.']);
-//        }
+            }
+
+            return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
+
+        }catch (\Exception $e){
+            return redirect()->route('cart')->withErrors(['Could not complete transaction! if you have made payment, contact us with your transaction reference.']);
+        }
     }
 }

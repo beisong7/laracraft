@@ -134,7 +134,6 @@ Route::group(['middleware'=>'monitor'], function () {
     });
     Route::post('start-order-payment', 'Payment\RaveController@initialize')->name('pay');
     //backend payment completion
-//    Route::post('rave/callback', 'Payment\RaveController@callback')->name('callback');
     Route::post('rave/callback', 'Payment\RaveController@callback')->name('callback');
 
 
@@ -194,6 +193,8 @@ Route::group(['middleware'=>'monitor'], function () {
     Route::get('complete/payment/{tranx}', 'PaymentController@finTran')->name('payment.complete');
 
     Route::get('test/callback/{tref}', 'Payment\RaveController@testGuz');
+    Route::get('payment/v/{ref}', 'Payment\RaveController@verify')->name('verify.callback');
+
 });
 
 

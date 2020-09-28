@@ -82,7 +82,7 @@ class RaveController extends Controller
                 return redirect()->route('cart')->withErrors(['Could not complete transaction!']);
             }
 
-            return redirect()->route('verify.callback', $tranx->txref);
+            return redirect()->route('verify.callback', encrypt($tranx->txref));
 
         } else {
             return redirect()->route('cart')->withErrors(['Could not complete transaction!']);
@@ -152,7 +152,7 @@ class RaveController extends Controller
             return redirect()->route('cart')->with(['error' => 'Transaction not found! Please, contact us.']);
 
         }catch (\Exception $e){
-
+            return redirect()->route('cart')->with(['error' => 'Could not complete transaction! if you have made payment, contact us with your transaction reference.']);
         }
     }
 }

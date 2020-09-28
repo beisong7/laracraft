@@ -71,7 +71,6 @@ class RaveController extends Controller
 
     /**
      * Obtain Rave callback information
-     * @return void
      */
     public function callback(Request $request){
         if (isset($request->txref)) {
@@ -81,7 +80,7 @@ class RaveController extends Controller
             if(empty($tranx)){
                 return redirect()->route('cart')->with(['error' => 'Could not complete transaction!']);
             }
-            sleep(1);
+
             $response = $this->paymentService->guzzle($tranx->txref);
 
             // If user cancels the transaction or something wrong happened.

@@ -116,4 +116,9 @@ $title = "Cart";
         </div>
     </div>
 
+    <script>
+        console.log('Callback url')
+        console.log('{{ route('callback') }}')
+    </script>
+
 @endsection

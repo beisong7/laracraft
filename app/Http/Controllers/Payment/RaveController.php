@@ -105,19 +105,20 @@ class RaveController extends Controller
             if(!empty($tranx)){
                 $response = $this->paymentService->guzzle($ref);
 
-                return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
-
                 /**
                  * If user cancels the transaction or something wrong happened.
                 */
 
 
-//                if ($response['status'] == 'error') {
-//                    return redirect()->route('cart')->with(['error' => 'Could not complete transaction! if you have made payment, contact us with your transaction reference.']);
-//                }
-////
-//                if (($response['data']['chargecode'] == "00" || $response['data']['chargecode'] == "0") && ($response['data']['amount'] == $tranx->amount)){
-//
+                if ($response['status'] == 'error') {
+                    return redirect()->route('cart')->with(['error' => 'Could not complete transaction! if you have made payment, contact us with your transaction reference.']);
+                }
+
+
+                if (($response['data']['chargecode'] == "00" || $response['data']['chargecode'] == "0") && ($response['data']['amount'] == $tranx->amount)){
+
+                    return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
+
 //                    if ($tranx->status === strtolower('attempting')) {
 //                        $paymentId = $this->setUuid();
 //
@@ -150,10 +151,10 @@ class RaveController extends Controller
 //                    }
 //
 //                    return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
-//
-//                }else{
-//                    return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
-//                }
+
+                }else{
+                    return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
+                }
             }
 
             return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);

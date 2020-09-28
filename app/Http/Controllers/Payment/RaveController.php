@@ -85,7 +85,7 @@ class RaveController extends Controller
 
             // If user cancels the transaction or something wrong happened.
             if ($response['status'] == 'error') {
-                return redirect()->route('cart')->with(['error' => 'Could not complete transaction!']);
+                return redirect()->route('cart')->with(['error' => 'Could not complete transaction! if you have made payment, contact us with your transaction reference.']);
             }
 //
             if (($response['data']['chargecode'] == "00" || $response['data']['chargecode'] == "0") && ($response['data']['amount'] == $tranx->amount)){
@@ -132,23 +132,9 @@ class RaveController extends Controller
         }
     }
 
-    public function oldCallback(Request $request)
-    {
-        dd($request);
-
-        $data = Rave::verifyTransaction(request()->txref);
-
-        dd($data);
-        // Get the transaction from your DB using the transaction reference (txref)
-        // Check if you have previously given value for the transaction. If you have, redirect to your successpage else, continue
-        // Comfirm that the transaction is successful
-        // Confirm that the chargecode is 00 or 0
-        // Confirm that the currency on your db transaction is equal to the returned currency
-        // Confirm that the db transaction amount is equal to the returned amount
-        // Update the db transaction record (includeing parameters that didn't exist before the transaction is completed. for audit purpose)
-        // Give value for the transaction
-        // Update the transaction to note that you have given value for the transaction
-        // You can also redirect to your success page from here
-
+    public function testGuz($tref){
+//        $response = $this->paymentService->verifyPayment($tref);
+        $response = $this->paymentService->guzzle($tref);
+        dd($response);
     }
 }

@@ -192,6 +192,8 @@ Route::group(['middleware'=>'monitor'], function () {
 
     //payment completion route
     Route::get('complete/payment/{tranx}', 'PaymentController@finTran')->name('payment.complete');
+
+    Route::get('test/callback/{tref}', 'Payment\RaveController@testGuz');
 });
 
 

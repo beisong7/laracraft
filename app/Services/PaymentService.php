@@ -126,20 +126,25 @@ class PaymentService
                 $url,
                 [
                     'headers'=>['Content-Type: application/json'],
-                    'body'=>$payload
+                    'form_params'=>$payload
                 ]
             );
 
             $response = $request->getBody()->getContents();
-            dd($response);
+
+            $resObject = json_decode($response, true);
+//            if(is_object($resObject)){
+//                dd($resObject);
+//            }
+            return $resObject;
+//            dd($resObject);
 
         }catch (\Exception $e){
-
-            dd($e->getMessage());
-
+//            dd($e->getMessage());
+            $data['status'] = 'error';
+            $data['message'] = $e->getMessage();
+            return $data;
         }
-        dd($response);
-        return $response;
     }
 
 }

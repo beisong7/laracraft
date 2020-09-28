@@ -125,7 +125,7 @@ class RaveController extends Controller
                         $tranx->payment_id = $paymentId;
                         $tranx->ends = time();
                         $tranx->details = "Payment for $amount completed at ".date('F d, y : h:i:s', time()).". ";
-//                        $tranx->update();
+                        $tranx->update();
 
                         $payment = new Payment();
                         $payment->uuid = $paymentId;
@@ -133,7 +133,7 @@ class RaveController extends Controller
                         $payment->success = true;
                         $payment->amount = $amount;
                         $payment->status = 'success';
-//                        $payment->save();
+                        $payment->save();
 
                         return redirect()->route('payment.complete', $tranx->uuid);
 

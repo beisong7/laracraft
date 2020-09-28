@@ -96,63 +96,66 @@ class RaveController extends Controller
     }
 
     public function verify($encryption){
-        try{
-            $ref = decrypt($encryption);
 
-            $tranx = Transaction::where('txref', $ref)->first();
+        return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
 
-            if(!empty($tranx)){
-                $response = $this->paymentService->guzzle($ref);
-
-                // If user cancels the transaction or something wrong happened.
-                if ($response['status'] == 'error') {
-                    return redirect()->route('cart')->with(['error' => 'Could not complete transaction! if you have made payment, contact us with your transaction reference.']);
-                }
+//        try{
+//            $ref = decrypt($encryption);
 //
-                if (($response['data']['chargecode'] == "00" || $response['data']['chargecode'] == "0") && ($response['data']['amount'] == $tranx->amount)){
-
-                    if ($tranx->status === strtolower('attempting')) {
-                        $paymentId = $this->setUuid();
-
-                        $amount = $tranx->amount;
-                        $tranx->status = "success";
-                        $tranx->payment_id = $paymentId;
-                        $tranx->ends = time();
-                        $tranx->details = "Payment for $amount completed at ".date('F d, y : h:i:s', time()).". ";
-                        $tranx->update();
-
-                        $payment = new Payment();
-                        $payment->uuid = $paymentId;
-                        $payment->email = $tranx->email;
-                        $payment->success = true;
-                        $payment->amount = $amount;
-                        $payment->status = 'success';
-                        $payment->save();
-
-                        return redirect()->route('payment.complete', $tranx->uuid);
-
-                    }
-
-                    if($tranx->status === strtolower('success')){
-                        $payment = Payment::where('uuid', $tranx->payment_id)->first();
-                        if(!empty($payment)){
-                            return redirect()->route('payment.complete', $tranx->uuid);
-                        }else{
-                            return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
-                        }
-                    }
-
-                    return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
-
-                }else{
-                    return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
-                }
-            }
-
-            return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
-
-        }catch (\Exception $e){
-            return redirect()->route('cart')->withErrors(['Could not complete transaction! if you have made payment, contact us with your transaction reference.']);
-        }
+//            $tranx = Transaction::where('txref', $ref)->first();
+//
+//            if(!empty($tranx)){
+//                $response = $this->paymentService->guzzle($ref);
+//
+//                // If user cancels the transaction or something wrong happened.
+//                if ($response['status'] == 'error') {
+//                    return redirect()->route('cart')->with(['error' => 'Could not complete transaction! if you have made payment, contact us with your transaction reference.']);
+//                }
+////
+//                if (($response['data']['chargecode'] == "00" || $response['data']['chargecode'] == "0") && ($response['data']['amount'] == $tranx->amount)){
+//
+//                    if ($tranx->status === strtolower('attempting')) {
+//                        $paymentId = $this->setUuid();
+//
+//                        $amount = $tranx->amount;
+//                        $tranx->status = "success";
+//                        $tranx->payment_id = $paymentId;
+//                        $tranx->ends = time();
+//                        $tranx->details = "Payment for $amount completed at ".date('F d, y : h:i:s', time()).". ";
+//                        $tranx->update();
+//
+//                        $payment = new Payment();
+//                        $payment->uuid = $paymentId;
+//                        $payment->email = $tranx->email;
+//                        $payment->success = true;
+//                        $payment->amount = $amount;
+//                        $payment->status = 'success';
+//                        $payment->save();
+//
+//                        return redirect()->route('payment.complete', $tranx->uuid);
+//
+//                    }
+//
+//                    if($tranx->status === strtolower('success')){
+//                        $payment = Payment::where('uuid', $tranx->payment_id)->first();
+//                        if(!empty($payment)){
+//                            return redirect()->route('payment.complete', $tranx->uuid);
+//                        }else{
+//                            return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
+//                        }
+//                    }
+//
+//                    return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
+//
+//                }else{
+//                    return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
+//                }
+//            }
+//
+//            return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
+//
+//        }catch (\Exception $e){
+//            return redirect()->route('cart')->withErrors(['Could not complete transaction! if you have made payment, contact us with your transaction reference.']);
+//        }
     }
 }

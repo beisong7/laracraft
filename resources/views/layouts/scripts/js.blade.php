@@ -235,4 +235,18 @@
             console.log('you said no')
         }
     }
+
+    function isNumberKey(evt) {
+            let k = evt.key;
+            if(isNaN(k) ){
+                return false;
+            }else{
+                return true;
+            }
+
+//        var charCode = (evt.which) ? evt.which : evt.keyCode;
+//        console.log(charCode);
+//        return !(charCode > 31 && (charCode < 46 || charCode > 57 || charCode === 47 ));
+//            return !(charCode > 31 && (charCode < 46 || charCode > 57 ));
+    }
 </script>

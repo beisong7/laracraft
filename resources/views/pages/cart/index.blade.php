@@ -84,8 +84,9 @@ $title = "Cart";
                                             <input name="phone" placeholder="Phone (required)" class="form-element" required autocomplete="off" value="{{ $person->phone }}" readonly="readonly">
                                         </div>
                                         <div class="buyer mb-2">
+                                            <input name="phone" class="form-element" onkeypress="return isNumberKey(event);" placeholder="Phone (required)" required autocomplete="off" value="{{ $person->phone }}" readonly="readonly">
                                             <input name="email" type="email" class="form-element" placeholder="Email (important)" autocomplete="off" value="{{ $person->email }}" readonly="readonly">
-                                            <br><small class="text-muted">Input email to track order.</small>
+
                                         </div>
 
                                     </div>
@@ -97,7 +98,7 @@ $title = "Cart";
                                                 <input name="last_name" class="form-element" placeholder="Last Name (required)" required autocomplete="off">
                                             </div>
                                             <div class="buyer mb-2">
-                                                <input name="phone" class="form-element" placeholder="Phone (required)" required autocomplete="off">
+                                                <input name="phone" class="form-element" onkeypress="return isNumberKey(event);" placeholder="Phone (required)" required autocomplete="off">
                                                 <input name="email" class="form-element" type="email" placeholder="Email (important)" autocomplete="off">
                                             </div>
                                         </div>

@@ -81,6 +81,7 @@ class RaveController extends Controller
             if(empty($tranx)){
                 return redirect()->route('cart')->with(['error' => 'Could not complete transaction!']);
             }
+            sleep(1);
             $response = $this->paymentService->guzzle($tranx->txref);
 
             // If user cancels the transaction or something wrong happened.

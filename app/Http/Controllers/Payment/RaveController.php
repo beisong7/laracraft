@@ -79,13 +79,13 @@ class RaveController extends Controller
             $tranx = Transaction::where('txref', $request->txref)->first();
 
             if(empty($tranx)){
-                return redirect()->route('cart')->with(['error' => 'Could not complete transaction!']);
+                return redirect()->route('cart')->withErrors(['Could not complete transaction!']);
             }
 
             return redirect()->route('verify.callback', $tranx->txref);
 
         } else {
-//            return redirect()->route('payment.failed')->with(['error' => 'No reference supplied!']);
+            return redirect()->route('cart')->withErrors(['Could not complete transaction!']);
         }
     }
 

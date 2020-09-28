@@ -121,11 +121,11 @@ class RaveController extends Controller
                         $paymentId = $this->setUuid();
 
                         $amount = $tranx->amount;
-                        $tranx->status = "success";
-                        $tranx->payment_id = $paymentId;
-                        $tranx->ends = time();
-                        $tranx->details = "Payment for $amount completed at ".date('F d, y : h:i:s', time()).". ";
-                        $tranx->update();
+                        $trUpdate['status'] = "success";
+                        $trUpdate['payment_id'] = $paymentId;
+                        $trUpdate['ends'] = time();
+                        $trUpdate['details'] = "Payment for $amount completed at ".date('F d, y : h:i:s', time()).". ";
+                        $tranx->update($trUpdate);
 
                         $payment = new Payment();
                         $payment->uuid = $paymentId;

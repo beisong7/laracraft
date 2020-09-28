@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Http;
 //Rave Facade
 use Illuminate\Support\Facades\Auth;
 use KingFlamez\Rave\Facades\Rave;
+use Illuminate\Support\Facades\DB;
 
 class RaveController extends Controller
 {
@@ -121,11 +122,15 @@ class RaveController extends Controller
                         $paymentId = $this->setUuid();
 
                         $amount = $tranx->amount;
-                        $trUpdate['status'] = "success";
-                        $trUpdate['payment_id'] = $paymentId;
-                        $trUpdate['ends'] = time();
-                        $trUpdate['details'] = "Payment for $amount completed at ".date('F d, y : h:i:s', time()).". ";
 //                        $tranx->update($trUpdate);
+                        DB::table('transactions')->where('uuid', $tranx->uuid)->update(
+                            [
+                                'status' => "success",
+                                'payment_id' => $paymentId,
+                                'ends' => time(),
+                                'details' => "Payment for $amount completed at ".date('F d, y : h:i:s', time()).". ",
+                            ]
+                        );
 
                         Payment::create([
                             'uuid' => $paymentId,

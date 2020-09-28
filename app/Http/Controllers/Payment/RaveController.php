@@ -125,7 +125,7 @@ class RaveController extends Controller
                         $trUpdate['payment_id'] = $paymentId;
                         $trUpdate['ends'] = time();
                         $trUpdate['details'] = "Payment for $amount completed at ".date('F d, y : h:i:s', time()).". ";
-                        $tranx->update($trUpdate);
+//                        $tranx->update($trUpdate);
 
                         Payment::create([
                             'uuid' => $paymentId,

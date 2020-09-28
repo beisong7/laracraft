@@ -9,6 +9,7 @@ use App\Traits\Email\MailCart;
 use App\Traits\General\Uuid;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 
 //Rave Facade
 use Illuminate\Support\Facades\Auth;
@@ -80,7 +81,7 @@ class RaveController extends Controller
             if(empty($tranx)){
                 return redirect()->route('cart')->with(['error' => 'Could not complete transaction!']);
             }
-            $response = $this->paymentService->verifyPayment($tranx->txref);
+            $response = $this->paymentService->guzzle($tranx->txref);
 
             // If user cancels the transaction or something wrong happened.
             if ($response['status'] == 'error') {

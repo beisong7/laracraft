@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Traits\RavePayment;
 use Illuminate\Http\Request;
+use GuzzleHttp\Client as Http;
 
 class PaymentService
 {
@@ -108,6 +109,37 @@ class PaymentService
         curl_close($ch);
 
         return json_decode($response, true);
+    }
+
+    public function guzzle($txref){
+
+        $client = new Http(['timeout'  => 30.0,]);
+
+        $url = $this->getUrl('/v2/verify');
+        $payload['SECKEY'] = $this->getSecretKey();
+        $payload['txref'] = $txref;
+        $response = null;
+
+        try{
+
+            $request = $client->request('POST',
+                $url,
+                [
+                    'headers'=>['Content-Type: application/json'],
+                    'body'=>$payload
+                ]
+            );
+
+            $response = $request->getBody()->getContents();
+            dd($response);
+
+        }catch (\Exception $e){
+
+            dd($e->getMessage());
+
+        }
+        dd($response);
+        return $response;
     }
 
 }

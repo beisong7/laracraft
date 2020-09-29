@@ -123,6 +123,7 @@ class RaveController extends Controller
 
                         $amount = $tranx->amount;
 //                        $tranx->update($trUpdate);
+                        DB::beginTransaction();
                         DB::table('transactions')->where('uuid', $tranx->uuid)->update(
                             [
                                 'status' => "success",
@@ -139,6 +140,7 @@ class RaveController extends Controller
                             'amount' => $amount,
                             'status' => 'success',
                         ]);
+                        DB::commit();
 //                        $payment = new Payment();
 //                        $payment->uuid = $paymentId;
 //                        $payment->email = $tranx->email;

@@ -1,0 +1,3 @@
+##
+run `php artisan event:cache` for production and to make it faster
+run `php artisan event:clear` to destroy cache

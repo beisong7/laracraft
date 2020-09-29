@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Payment;
 
+use App\Events\PaymentEvent;
 use App\Models\Payment;
 use App\Models\Transaction;
 use App\Services\PaymentService;
@@ -9,12 +10,11 @@ use App\Traits\Email\MailCart;
 use App\Traits\General\Uuid;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Http;
 
 //Rave Facade
 use Illuminate\Support\Facades\Auth;
-use KingFlamez\Rave\Facades\Rave;
 use Illuminate\Support\Facades\DB;
+use KingFlamez\Rave\Facades\Rave;
 
 class RaveController extends Controller
 {
@@ -93,7 +93,10 @@ class RaveController extends Controller
     public function testGuz($tref){
 //        $response = $this->paymentService->verifyPayment($tref);
         $response = $this->paymentService->guzzle($tref);
-        dd($response);
+        $tranx = Transaction::where('txref', $tref)->first();
+        $object = ['hello'=>'world'];
+        event(new PaymentEvent($tranx->uuid, $object));
+        return "testing event";
     }
 
     public function verify($encryption){
@@ -123,15 +126,15 @@ class RaveController extends Controller
 
                         $amount = $tranx->amount;
 //                        $tranx->update($trUpdate);
+                        $obj = [
+                            'status' => "success",
+                            'payment_id' => $paymentId,
+                            'ends' => time(),
+                            'details' => "Payment for $amount completed at ".date('F d, y : h:i:s', time()).". ",
+                        ];
                         DB::beginTransaction();
-                        DB::table('transactions')->where('uuid', $tranx->uuid)->update(
-                            [
-                                'status' => "success",
-                                'payment_id' => $paymentId,
-                                'ends' => time(),
-                                'details' => "Payment for $amount completed at ".date('F d, y : h:i:s', time()).". ",
-                            ]
-                        );
+//
+                        event(new PaymentEvent($tranx->uuid, $obj));
 
                         Payment::create([
                             'uuid' => $paymentId,

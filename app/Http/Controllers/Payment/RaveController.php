@@ -5,25 +5,27 @@ namespace App\Http\Controllers\Payment;
 use App\Events\PaymentEvent;
 use App\Models\Payment;
 use App\Models\Transaction;
+use App\Services\Cart\ProcessOrder;
 use App\Services\PaymentService;
+use App\Traits\Cart\CostAudit;
 use App\Traits\Email\MailCart;
 use App\Traits\General\Uuid;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 //Rave Facade
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use KingFlamez\Rave\Facades\Rave;
 
 class RaveController extends Controller
 {
-    use Uuid, MailCart;
+    use Uuid, MailCart, CostAudit;
 
     private $paymentService;
+    private $cartService;
 
-    public function __construct(PaymentService $paymentService) {
+    public function __construct(PaymentService $paymentService, ProcessOrder $cartService) {
         $this->paymentService = $paymentService;
+        $this->cartService = $cartService;
     }
 
     public function initialize(Request $request)
@@ -39,10 +41,16 @@ class RaveController extends Controller
         }
 
         $amount = $request->input('amount');
+        if(!$this->costMatchWith($amount)){
+            return back()->withMessage('Page Updated! Click pay not to checkout...');
+        }
+
+        $txref = $this->buildId('RaV3-', 45);
+
         //start local transaction payment
         $tranx = new Transaction();
         $tranx->uuid = $this->setUuid();
-        $tranx->txref = $request->input('uuid');
+        $tranx->txref = $txref;
         $tranx->first_name = $request->input('firstname');
         $tranx->last_name = $request->input('lastname');
         $tranx->email = $request->input('email');
@@ -55,19 +63,30 @@ class RaveController extends Controller
         $tranx->details = "Started payment for $amount at ".date('F d, y : h:i:s', time()). " | ";
         $tranx->save();
 
+        $paym_id = $this->setUuid();
+
+        $payment = new Payment();
+        $payment->uuid = $paym_id;
+        $payment->email = $tranx->email;
+        $payment->transaction_id = $tranx->uuid;
+        $payment->success = false;
+        $payment->amount = $amount;
+        $payment->status = 'initiated';
+        $payment->save();
+
+        $this->cartService->prepareOrder($tranx, $payment->uuid);
+
         //This initializes payment and redirects to the payment gateway
 
-        $payload = $this->paymentService->formatPayload($request);
+        $payload = $this->paymentService->formatPayload($request, $txref);
 
-        if ($transaction = $this->paymentService->initiatePayment($payload)) {
+        $transaction = $this->paymentService->initiatePayment($payload);
+        if ($transaction!==false) {
             // redirect to payment page so user can pay
             return redirect($transaction['data']['link']);
         }
 
-        return back()->withErrors(['Could not initiate payment!']);
-
-        //The initialize method takes the parameter of the redirect URL
-        // Rave::initialize(route('callback'));
+        return redirect()->route('cart')->withErrors(['Could not contact payment! Try again']);
     }
 
     /**
@@ -80,7 +99,62 @@ class RaveController extends Controller
             $tranx = Transaction::where('txref', $request->txref)->first();
 
             if(empty($tranx)){
+                dd($request->txref);
                 return redirect()->route('cart')->withErrors(['Could not complete transaction!']);
+            }
+
+            $payment = Payment::where('transaction_id',$tranx->uuid )->first();
+            if(empty($payment)){
+                dd($tranx->uuid);
+                return redirect()->route('cart')->withErrors(['Could not complete transaction!']);
+            }
+
+            $response = $this->paymentService->verifyPayment($tranx->txref);
+
+            // If user cancels the transaction or something wrong happened.
+            if ($response['status'] == 'error') {
+                return redirect()->route('cart')->withErrors(['Could not complete transaction!']);
+            }
+
+            if (($response['data']['chargecode'] == "00" || $response['data']['chargecode'] == "0") && ($response['data']['amount'] == $tranx->amount)){
+
+                if ($tranx->status === strtolower('attempting')) {
+
+                    $paymentId = $this->setUuid();
+
+                    $amount = $tranx->amount;
+
+                    $payload = [
+                        'status' => "success",
+                        'payment_id' => $payment->uuid,
+                        'ends' => time(),
+                        'details' => "Payment for ".$amount ."completed at ".date('F d, y : h:i:s', time()).". ",
+                    ];
+
+                    DB::beginTransaction();
+
+//                    event(new PaymentSuccess($tranz->uuid, $obj));
+                    DB::table('transactions')
+                        ->where('uuid', $tranx->uuid)
+                        ->update($payload);
+
+
+                    DB::commit();
+
+                    return redirect()->route('payment.complete', $tranx->uuid);
+
+                }elseif ($tranx->status === strtolower('success')){
+
+                    $payment = Payment::where('uuid', $tranx->payment_id)->first();
+                    if(!empty($payment)){
+                        return redirect()->route('payment.complete', $tranx->uuid);
+                    }else{
+                        return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
+                    }
+                }
+
+            }else{
+                return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
             }
 
             return redirect()->route('verify.callback', encrypt($tranx->txref));
@@ -111,7 +185,7 @@ class RaveController extends Controller
 
                 /**
                  * If user cancels the transaction or something wrong happened.
-                */
+                 */
 
 
                 if ($response['status'] == 'error') {
@@ -170,6 +244,8 @@ class RaveController extends Controller
             }
 
             return redirect()->route('cart')->withErrors(['Transaction not found! Please, contact us.']);
+
+
 
         }catch (\Exception $e){
             return redirect()->route('cart')->withErrors(['Could not complete transaction! if you have made payment, contact us with your transaction reference.']);

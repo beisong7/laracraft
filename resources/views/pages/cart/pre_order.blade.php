@@ -89,7 +89,6 @@ $title = "Cart";
                                         </ul>
                                         <br>
                                         <div class="button5">
-                                            <input type="hidden" name="uuid" value="{{ !empty($uuid)?$uuid:'' }}" /> <!-- Local Transaction ID -->
                                             <input type="hidden" name="amount" value="{{ $total }}" /> <!-- Replace the value with your transaction amount -->
                                             <input type="hidden" name="payment_method" value="card" /> <!-- Can be card, account, both -->
                                             <input type="hidden" name="description" value="Purchase {{ !empty($cartItems)?count($cartItems):0 }} Item(s) with {{ env('APP_NAME', '') }} on {{ date('F d, Y') }}." /> <!-- Replace the value with your transaction description -->

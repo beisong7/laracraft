@@ -183,7 +183,7 @@ class CartController extends MyController
                 'last_name' => $last_name,
                 'email' => $email,
                 'phone' => $phone,
-                'uuid' => $uuid,
+//                'uuid' => $uuid,
             ]
         );
     }

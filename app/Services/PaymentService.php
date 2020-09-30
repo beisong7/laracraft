@@ -16,7 +16,7 @@ class PaymentService
      * @param  array  $data
      * @return array
      */
-    public function formatPayload(Request $request)
+    public function formatPayload(Request $request, $txref)
     {
 //        dd($this->getRedirectUrl());
         $payload = [
@@ -26,7 +26,7 @@ class PaymentService
             'amount' => $request->input('amount'),
             'country' => $request->input('country'),
             'currency' => $request->input('currency'),
-            'txref' => $request->input('uuid'),
+            'txref' => $txref,
             'PBFPubKey' => $this->getPublicKey(),
             'redirect_url' => $this->getRedirectUrl(),
         ];
@@ -40,7 +40,7 @@ class PaymentService
      * Initiate payment to the payment gateway
      *
      * @param  array  $payload
-     * @return \Illuminate\Support\Facades\Redirect
+     * @return object|bool
      */
     public function initiatePayment($payload)
     {
@@ -62,17 +62,23 @@ class PaymentService
 
         if($err){
             // there was an error contacting the API
-            die('Failed: ' . $err);
+            return false;
+//            die('Failed: ' . $err);
         }
 
         $transaction = json_decode($response, true);
 
-        if (! $transaction['data'] && ! $transaction['data']['link']) {
-            // there was an error from the API
-            print_r(
-                'Something went wrong: ' . $transaction['message'] . '. Please, contact us on '
-                . config('app.support_email') . ' if this issue continues.'
-            );
+        try{
+            if (! $transaction['data'] && ! $transaction['data']['link']) {
+                // there was an error from the API
+                print_r(
+                    'Something went wrong: ' . $transaction['message'] . '. Please, contact us on '
+                    . config('app.support_email') . ' if this issue continues.'
+                );
+                return false;
+            }
+        }catch (\Exception $e){
+            return false;
         }
 
         return $transaction;

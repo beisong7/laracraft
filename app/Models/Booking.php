@@ -12,6 +12,7 @@ class Booking extends Model
         'replied',
         'email',
         'customer_id',
+        'transaction_id',
         'phone',
         'name',
         'canceled',

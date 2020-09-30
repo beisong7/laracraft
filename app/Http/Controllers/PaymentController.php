@@ -12,6 +12,7 @@ use App\Traits\Email\MailCart;
 use App\Traits\General\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 
 class PaymentController extends Controller
@@ -25,7 +26,7 @@ class PaymentController extends Controller
         }
 
         //find the associated payment
-        $payment = Payment::where('uuid', $tranx->payment_id)->first();
+        $payment = Payment::where('transaction_id', $tran_id)->first();
         if(empty($payment)){
             return redirect()->route('cart')->withErrors(['Unable to complete request.']);
         }
@@ -34,36 +35,35 @@ class PaymentController extends Controller
 
     }
 
-    public function handleOrder($transaction, $payment){
+    public function handleOrder($transaction, $payment_id){
 
-        $name = $transaction->first_name." ".$transaction->last_name;
-        $phone = $transaction->phone;
-        $email = $transaction->email;
-
-        $booking = new Booking();
-        $booking->seen = false;
-        $booking->handled = false;
-        $booking->replied = false;
-        $booking->email = $email;
-
+        $cus_id = null;
         if(Auth::guard('customer')->check()){
-            $booking->customer_id = Auth::guard('customer')->user()->uuid;
+            $cus_id = Auth::guard('customer')->user()->unid;
         }
 
-        $booking->phone = $phone;
-        $booking->name = $name;
-        $booking->uuid = "BK-".$this->setUuid();
-        $booking->save();
+        DB::beginTransaction();
 
-        $payment->order_id = $booking->uuid;
-        $payment->update();
+        $booking = Booking::where('transaction_id', $transaction->uuid)->first();
 
-        $transaction->cart_id = $booking->uuid;
-        $transaction->update();
+        DB::table('payments')
+            ->where('uuid', $payment_id)
+            ->update([
+                'order_id'=>$booking->unid,
+                'success' => true,
+                'status' => 'success',
+            ]);
+
+        DB::table('transactions')
+            ->where('uuid', $transaction->uuid)
+            ->update([
+                'cart_id'=>$booking->unid,
+            ]);
+
 
 
         //register customer if empty
-        $customer = Customer::where('email', $email)->first();
+        $customer = Customer::where('email', $transaction->email)->first();
 
         if(empty($customer)){
 //            $customer = new Customer();
@@ -72,29 +72,19 @@ class PaymentController extends Controller
 //            $customer->save();
         }
 
+        DB::commit();
+
         $key = "my_cart_list";
         $cartItems = session($key);
 
 //        $cartItems = $request->session()->get($key);
         if(!empty($cartItems)){
-            if(count($cartItems)>0){
-                foreach ($cartItems as $item){
-                    $cart = new Cart();
-                    $cart->book_uuid = $booking->uuid;
-                    $cart->product_id = $item['uuid'];
-                    $cart->qty = $item['qty'];
-                    $cart->price = $item['price'];
-                    $cart->total_price = $item['total_price'];
-                    $cart->save();
-                }
-            }
 
             //unload the session
             session()->forget($key);
 
             //send email to email if exists
             if(!empty($email)){
-
                 $this->sendOrderMail($email, $booking);
 //                    $this->productOrderMail($email, $booking);
             }
@@ -105,15 +95,6 @@ class PaymentController extends Controller
             }else{
                 return redirect()->route('cart')->withMessage('Your order has been completed successfully. Check your email for details.');
             }
-
-//            try{
-//
-//
-//
-//
-//            }catch (\Exception $e){
-//                return back()->withErrors(['errors'=>"Unable to complete. Error - ".$e->getMessage().". Contact us on ".env('SITE_EMAIL')."."]);
-//            }
         }
 
         return redirect()->route('cart')->withErrors(['Your cart might me empty. Contact us if you just made a payment.']);

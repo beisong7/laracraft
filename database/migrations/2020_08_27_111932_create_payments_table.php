@@ -18,6 +18,7 @@ class CreatePaymentsTable extends Migration
             $table->string('client_key')->nullable();
             $table->string('uuid')->nullable();
             $table->string('reference')->nullable();
+            $table->string('transaction_id')->nullable();
             $table->string('email')->nullable();
             $table->string('order_id')->nullable();
             $table->bigInteger('kobo')->nullable();

@@ -17,6 +17,7 @@ class Booking extends Model
         'name',
         'canceled',
         'uuid',
+        'active',
     ];
 
     public function details(){

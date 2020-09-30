@@ -20,10 +20,12 @@ class CreateBookingsTable extends Migration
             $table->boolean('replied')->nullable();
             $table->string('email')->nullable();
             $table->text('customer_id')->nullable();
+            $table->text('transaction_id')->nullable();
             $table->string('phone')->nullable();
             $table->string('name')->nullable();
             $table->boolean('canceled')->nullable();
             $table->string('uuid')->nullable();
+            $table->boolean('active')->nullable();
             $table->timestamps();
         });
     }

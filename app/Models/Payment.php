@@ -10,6 +10,7 @@ class Payment extends Model
         'client_key',
         'uuid',
         'reference',
+        'transaction_id',
         'email',
         'order_id',
         'kobo',

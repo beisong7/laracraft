@@ -31,9 +31,10 @@ $title = "Slider / New";
 
                             <div class="form-group row">
 
-                                <label for="name" class="col-md-2 col-form-label text-md-right">Images * (1 allowed)</label>
+                                <label for="name" class="col-md-2 col-form-label text-md-right">Images * (1 allowed) </label>
 
                                 <div class="col-md-10">
+                                    <p class="text-danger mb-0"><small>1170 x 500 (optimal dimension)</small></p>
                                     <div id="dropzone" class="dropzone" ></div>
                                     <p class="dz_respo text-danger mt-2 mb-0"></p>
                                 </div>

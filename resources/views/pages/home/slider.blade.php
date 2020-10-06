@@ -2,7 +2,7 @@
 <div class="kids-winter">
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-sm-12 col-xs-12 kids">
+            <div class="col-sm-12 col-xs-12 kids">
                 <div class="kids-st">
                     <div class="owl-carousel owl-theme owl-cate v2 js-owl-cate-hp1">
 
@@ -11,11 +11,11 @@
 
                             @if($slider->is_url)
                                 <a href="{{ empty($slider->slider_url)?route('view.products'):$slider->slider_url}}" target="_blank">
-                                    <img src="{{ $slider->image }}" alt="">
+                                    <img src="{{ $slider->image }}" alt="" style="height: 500px">
                                 </a>
                             @else
                                     <div class="shop-now hp1">
-                                        <img src="{{ $slider->image }}" alt="">
+                                        <img src="{{ $slider->image }}" alt="" style="height: 500px">
                                         {!! $slider->main_text !!}
                                         @if(!empty($slider->more_text))
                                             {!! $slider->more_text !!}
@@ -36,22 +36,22 @@
                             <?php $posi+=1 ?>
                         @empty
                                 <div class="shop-now hp1">
-                                    <img src="{{ url('template/slider1.jpg') }}" alt="">
+                                    <img src="{{ url('template/slider1.jpg') }}" alt="" style="height: 500px">
                                     <h4>Kids Winter <span>Jacket,<br>
                                             Coat & Sweater</span></h4>
                                     <p>It is a long established fact that a reader will be distracted by the<br>
                                         readable content of a page when looking at its layout</p>
                                     <a href="#">Shop now</a>
                                 </div>
-                                <img src="{{ url('template/slider2.jpg') }}" alt="">
+                                <img src="{{ url('template/slider2.jpg') }}" alt="" style="height: 500px">
                         @endforelse
 
 
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-12 col-xs-12">
-                <div class="backpack img81">
+            {{--<div class="col-md-4 col-sm-12 col-xs-12 ">
+                <div class="backpack img81" style="height: 100%">
                     <a href="{{ route('view.products') }}" class="hover-images"><img src="{{ url('images/bg-mix.gif') }}" alt="" style="width: 100%">
                         <div class="pos text-center" style="width: 80%">
                             <span>{{ date('F') }}</span>
@@ -62,6 +62,7 @@
                 </div>
 
             </div>
+            --}}
         </div>
     </div>
 </div>

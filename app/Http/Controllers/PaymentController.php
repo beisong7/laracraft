@@ -35,7 +35,7 @@ class PaymentController extends Controller
 
     }
 
-    public function handleOrder($transaction, $payment_id){
+    public function handleOrder($transaction, $payment){
 
         $cus_id = null;
         if(Auth::guard('customer')->check()){
@@ -47,7 +47,7 @@ class PaymentController extends Controller
         $booking = Booking::where('transaction_id', $transaction->uuid)->first();
 
         DB::table('payments')
-            ->where('uuid', $payment_id)
+            ->where('uuid', $payment->uuid)
             ->update([
                 'order_id'=>$booking->unid,
                 'success' => true,

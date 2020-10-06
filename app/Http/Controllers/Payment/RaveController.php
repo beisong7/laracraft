@@ -128,6 +128,7 @@ class RaveController extends Controller
                         'status' => "success",
                         'payment_id' => $payment->uuid,
                         'ends' => time(),
+                        'completed' => true,
                         'details' => "Payment for ".$amount ."completed at ".date('F d, y : h:i:s', time()).". ",
                     ];
 

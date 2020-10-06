@@ -42,7 +42,7 @@ class ConsoleController extends Controller
         $succTrans = $transactions->where('status', 'successful')->get()->count();
 
         //revenue
-        $revenue = Payment::where('status', 'successful')->select(['amount'])->get()->sum('amount');
+        $revenue = Payment::where('status', true)->select(['amount'])->get()->sum('amount');
 
         //admin count
         $adminCount = User::select(['id'])->where('who', '>', 1)->get()->count();

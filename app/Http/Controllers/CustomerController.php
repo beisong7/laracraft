@@ -6,12 +6,13 @@ use App\Models\Customer;
 use App\Traits\Email\MailCart;
 use App\Traits\General\Redirects;
 use App\Traits\General\Utility;
+use App\Traits\General\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends MyController
 {
-    use Redirects, MailCart;
+    use Redirects, MailCart, Uuid;
     /**
      * Display a listing of the resource.
      *
@@ -23,6 +24,7 @@ class CustomerController extends MyController
     }
 
     public function register(Request $request){
+
 
         $email = $request->input('email');
 
@@ -48,13 +50,13 @@ class CustomerController extends MyController
         }
 
         $customer = new Customer();
-        $customer->name = $request->input('name');
-        $customer->uuid = $request->input('uuid');
+        $customer->first_name = $request->input('first_name');
+        $customer->last_name = $request->input('last_name');
+        $customer->uuid = $this->setUuid();
         $customer->email = $request->input('email');
         $customer->password = bcrypt($password);
         $customer->phone = $request->input('phone');
         $customer->active = false;
-        $customer->uuid = $this->generateId('CUS-', 30);
         $customer->reset_token = $this->makeToken(40);
         $customer->save();
 

@@ -46,13 +46,27 @@ class PaymentController extends Controller
 
         $booking = Booking::where('transaction_id', $transaction->uuid)->first();
 
-        DB::table('payments')
-            ->where('uuid', $payment->uuid)
-            ->update([
+        $customer = Auth::guard('customer')->user();
+        $data = null;
+        if(!empty($customer)){
+            $data = [
                 'order_id'=>$booking->unid,
                 'success' => true,
                 'status' => 'success',
-            ]);
+                'client_key' => $customer->uuid,
+            ];
+        }else{
+            $data = [
+                'order_id'=>$booking->unid,
+                'success' => true,
+                'status' => 'success',
+            ];
+        }
+
+
+        DB::table('payments')
+            ->where('uuid', $payment->uuid)
+            ->update($data);
 
         DB::table('transactions')
             ->where('uuid', $transaction->uuid)

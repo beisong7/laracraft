@@ -57,4 +57,16 @@ class Customer extends Authenticatable
     public function getwishlistAttribute(){
         return WishList::where('email', $this->email)->orWhere('customer_id', $this->uuid)->get();
     }
+
+    public function getNameAttribute(){
+        return "$this->first_name $this->last_name";
+    }
+
+    public function getPaymentsAttribute(){
+        return Payment::orderBy('id', 'desc')
+            ->where('success', true)
+            ->where('email', $this->email)
+            ->orWhere('client_key', $this->uuid)
+            ->get();
+    }
 }

@@ -162,17 +162,30 @@ class CartController extends MyController
 
     public function shopping_order(Request $request){
 
-        $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
-        ]);
+        $customer = $request->user('customer');
+        $first_name = null;
+        $last_name = null;
+        $email = null;
+        $phone = null;
 
-        $first_name = $request->input('first_name');
-        $last_name = $request->input('last_name');
-        $email = $request->input('email');
-        $phone = $request->input('phone');
+        if(empty($customer)){
+            $request->validate([
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'email' => 'required',
+                'phone' => 'required',
+            ]);
+
+            $first_name = $request->input('first_name');
+            $last_name = $request->input('last_name');
+            $email = $request->input('email');
+            $phone = $request->input('phone');
+        }else{
+            $first_name = $customer->first_name;
+            $last_name = $customer->last_name;
+            $email = $customer->email;
+            $phone = $customer->phone;
+        }
 
         $uuid = $this->generateId('RaV3-', 45);
 

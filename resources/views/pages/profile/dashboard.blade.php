@@ -1,29 +1,12 @@
 <?php
 $navlink['contact_us'] = 'active';
+$title = "My Account";
 ?>
 @extends('layouts.main')
 
 @section('content')
 
     @include('layouts.header')
-
-
-    <!-- Breadcrumbs -->
-    <div class="breadcrumbs">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="bread-inner">
-                        <ul class="bread-list">
-                            <li><a href="{{ route('home') }}">Home<i class="ti-arrow-right"></i></a></li>
-                            <li class="active"><a href="#">My Account</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Breadcrumbs -->
 
     <!-- Start Contact -->
     <section id="contact-us" class="contact-us section">
@@ -38,51 +21,45 @@ $navlink['contact_us'] = 'active';
                                 <h4>Activity Overview</h4>
                                 <hr>
                             </div>
-
-                            <div class="">
-
-                                <div class="row">
-                                    <div class="col-lg-6 col-12 mb-3">
-                                       <div class="p-4 shadow-sm d-card">
-                                           <div class="row">
-                                               <div class="col">
-                                                   <h6>Orders</h6>
-                                                   <a href="{{ route('customer.orders') }}">View</a>
-                                               </div>
-                                               <div class="col">
-                                                   <h3>{{ $person->orders->count() }}</h3>
-                                               </div>
-                                           </div>
-                                       </div>
-                                    </div>
-                                    <div class="col-lg-6 col-12 mb-3">
-                                        <div class="p-4 shadow-sm d-card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <h6>Reviews</h6>
-                                                    <a href="{{ route('customer.reviews') }}">View</a>
-                                                </div>
-                                                <div class="col">
-                                                    <h3>{{ $person->reviews->count() }}</h3>
-                                                </div>
-                                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-12 mag-3">
+                                    <div class="bg-card shadow" style="position:relative;">
+                                        <div class="">
+                                            <h4 style="">Orders</h4>
+                                            <h1>{{ $person->orders->count() }}</h1>
                                         </div>
+                                        <b><a class="float-right" href="{{ route('customer.orders') }}">View</a></b>
                                     </div>
-                                    <div class="col-lg-6 col-12 mb-3">
-                                        <div class="p-4 shadow-sm d-card">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <h6>Wish List</h6>
-                                                    <a href="{{ route('customer.wishList') }}">View</a>
-                                                </div>
-                                                <div class="col">
-                                                    <h3>{{ $person->wishlist->count() }}</h3>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                 </div>
+                                <div class="col-lg-6 col-12 mag-3">
+                                    <div class="bg-card shadow" style="position:relative;">
+                                        <div class="">
+                                            <h4 style="">Reviews</h4>
+                                            <h1>{{ $person->reviews->count() }}</h1>
+                                        </div>
+                                        <b><a class="float-right" href="{{ route('customer.reviews') }}">View</a></b>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12 mag-3">
+                                    <div class="bg-card shadow" style="position:relative;">
+                                        <div class="">
+                                            <h4 style="">Wish List</h4>
+                                            <h1>{{ $person->wishlist->count() }}</h1>
+                                        </div>
+                                        <b><a class="float-right" href="{{ route('customer.wishList') }}">View</a></b>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-12 mag-3">
+                                    <div class="bg-card shadow" style="position:relative;">
+                                        <div class="">
+                                            <h4 style="">Payments</h4>
+                                            <h1>{{ $person->payments->count() }}</h1>
+                                        </div>
+                                        <b><a class="float-right" href="{{ route('customer.payList') }}">View</a></b>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>

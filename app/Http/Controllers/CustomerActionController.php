@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\WishList;
@@ -125,6 +126,16 @@ class CustomerActionController extends Controller
             return view('pages.profile.reviews')->with(['reviews'=>$reviews]);
         }
         return back()->withMessage('Could not find such.');
+    }
+
+    public function myPayments(Request $request){
+        $user = $request->user('customer');
+        $payments = Payment::orderBy('id', 'desc')
+            ->where('success', true)
+            ->where('client_key', $user->uuid)
+            ->orWhere('email', $user->email)
+            ->paginate(15);
+        return view('pages.profile.payments')->with(['payments'=>$payments]);
     }
 
 }

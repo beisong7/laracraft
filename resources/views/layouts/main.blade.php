@@ -1,4 +1,4 @@
-<?php $ver = 0.12 ?>
+<?php $ver = 0.13 ?>
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>

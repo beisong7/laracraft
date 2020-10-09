@@ -1,6 +1,6 @@
 <?php
 $navlink['contact_us'] = 'active';
-$title = "My Wish list";
+$title = "My Payments";
 ?>
 @extends('layouts.main')
 
@@ -8,6 +8,23 @@ $title = "My Wish list";
 
     @include('layouts.header')
 
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="bread-inner">
+                        <ul class="bread-list">
+                            <li><a href="{{ route('home') }}">Home<i class="ti-arrow-right"></i></a></li>
+                            <li class="active"><a href="#">My Payments</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Breadcrumbs -->
 
     <!-- Start Contact -->
     <section id="contact-us" class="contact-us section">
@@ -19,7 +36,7 @@ $title = "My Wish list";
                     <div class="col-lg-8 col-12">
                         <div class="form-main">
                             <div class="title">
-                                <h4>My Wish List</h4>
+                                <h4>My Payments</h4>
                                 <hr>
                             </div>
 
@@ -28,28 +45,22 @@ $title = "My Wish list";
                                     <table class="table">
                                         <thead class="thead-dark">
                                         <tr>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Photo</th>
                                             <th scope="col">Date</th>
+                                            <th scope="col">Amount</th>
+                                            <th scope="col">Transaction ID</th>
                                             <th scope="col">Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @forelse($wishes as $wish)
+                                        @forelse($payments as $payment)
                                             <tr>
-                                                <td>{{ $wish->product->name }}</td>
+                                                <td>{{ date('F d, Y', strtotime($payment->created_at)) }}</td>
+                                                <td>{{ number_format($payment->amount, 2) }}</td>
+                                                <td>{{ $payment->transaction->uuid }}</td>
+
                                                 <td>
-                                                    <div class="" style="width: 70px">
-                                                        <img src="{{ url($wish->product->OnePic) }}" alt="{{ $wish->product->name }}" style="width: 100%">
-                                                    </div>
-                                                </td>
-                                                <td>{{ $wish->created_at->diffForHumans() }}</td>
-                                                <td>
-                                                    <a href="{{ route('customer.pop_wish', $wish->uuid) }}" class="baby-btn baby-btn-bg">
-                                                        <i class="fa fa-trash"></i>
-                                                    </a>
-                                                    <a href="{{ route('preview.product', $wish->product->uuid) }}" class="baby-btn baby-btn-bg">
-                                                        <i class="fa fa-eye"></i> View
+                                                    <a href="{{ route('customer.view_order', $payment->transaction->book->uuid) }}" class="baby-btn baby-btn-bg">
+                                                        <i class="fa fa-eye"></i> View Order
                                                     </a>
                                                 </td>
                                             </tr>
@@ -65,7 +76,7 @@ $title = "My Wish list";
 
                             </div>
                             <hr>
-                            {{ $wishes->links() }}
+                            {{ $payments->links() }}
                         </div>
                     </div>
                 </div>

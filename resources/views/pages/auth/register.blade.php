@@ -11,50 +11,52 @@ $title = "Register";
     <div class="contact-us">
         <div class="container">
             <div class="row">
+
                 <div class="col-md-6 col-sm-7 col-xs-12 form-ct">
                     <div class="form-main">
                         <div class="title">
-                            <h4>Login In</h4>
-                            <h3>Sign into your Account</h3>
+                            <h4>Sign Up</h4>
+                            <h3>Create your Account</h3>
                         </div>
 
                         @include('layouts.notice')
 
-
                         <form class="form-customer form-login" method="post" action="{{ route('contact.register') }}" onsubmit="">
                             {{ csrf_field() }}
+
                             <div class="row">
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label>Full Name<span>*</span></label>
-                                        <input name="name" type="text" placeholder="Your Name" required value="{{ old('name') }}">
+                                <div class="col-md-6">
+                                    <div class="form-group contact mt-3">
+                                        <label>First Name<span>*</span></label>
+                                        <input name="first_name" type="text" class="form-control form-account" placeholder="Your Name" required value="{{ old('name') }}">
                                     </div>
                                 </div>
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label>Email<span>*</span></label>
-                                        <input name="email" type="email" placeholder="Your Email" required value="{{ old('email') }}">
+                                <div class="col-md-6">
+                                    <div class="form-group contact mt-3">
+                                        <label>Last Name<span>*</span></label>
+                                        <input name="last_name" type="text" class="form-control form-account" placeholder="Your Name" required value="{{ old('name') }}">
                                     </div>
                                 </div>
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label>Phone<span>*</span></label>
-                                        <input name="phone" type="text" placeholder="Your Phone" required value="{{ old('phone') }}">
-                                    </div>
-                                </div>
-
                             </div>
 
-                            <div class="form-group name contact">
+
+                            <div class="form-group contact">
+                                <label>Email<span>*</span></label>
+                                <input name="email" type="text" class="form-control form-account" placeholder="Your Email" required value="{{ old('email') }}">
+                            </div>
+
+                            <div class="form-group contact">
+                                <label>Phone<span>*</span></label>
+                                <input name="phone" type="text" onkeypress="return isNumberKey(event)" class="form-control form-account" placeholder="Your Phone" required value="{{ old('phone') }}">
+                            </div>
+
+                            <div class="form-group contact">
+                                <label>Password<span>*</span></label>
                                 <input name="password" class="form-control form-account" type="password" placeholder="Password" required>
-                                <input name="phone" type="text" placeholder="Your Phone" required value="{{ old('phone') }}">
                             </div>
 
-                            <div class="form-group name contact">
-                                <input name="password" class="form-control form-account" type="password" placeholder="Password" required>
-                            </div>
-
-                            <div class="form-group name contact">
+                            <div class="form-group contact">
+                                <label>Password<span>*</span></label>
                                 <input name="password2" class="form-control form-account" type="password" placeholder="Confirm Password" required>
                             </div>
 
@@ -62,7 +64,7 @@ $title = "Register";
                                 <button type="submit" class="zoa-btn btn-login hover-white contact">Sign Up</button>
                             </div>
 
-                            <b><a href="{{ route('client.login') }}" class="m-3">Already have an account?</a></b>
+                            <b><a href="{{ route('contact.entry') }}" class="m-3">Already have an account?</a></b>
                         </form>
                     </div>
                 </div>

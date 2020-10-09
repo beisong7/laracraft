@@ -90,3 +90,27 @@ a.menu-home-3.home-1-font {
 .no-border{
     border: none;
 }
+
+.btn-custom{
+    background: #2BB24C;
+    color: #fff;
+    font-weight: 800;
+}
+
+.btn-custom:hover{
+    background: #4fb264;
+    color: #dfdfdf;
+}
+
+.pad-1{padding: 10px}
+.pad-2{padding: 20px}
+.pad-3{padding: 30px}
+.pad-4{padding: 40px}
+.pad-5{padding: 50px}
+
+.bg-card{
+    padding: 5px 20px;
+}
+.mag-3{
+    margin-bottom: 25px;
+}

@@ -180,6 +180,7 @@ Route::group(['middleware'=>'monitor'], function () {
         Route::get('orders', 'CustomerActionController@orders')->name('customer.orders');
         Route::get('profile', 'CustomerActionController@profile')->name('customer.profile');
         Route::get('wish-list', 'CustomerActionController@myWishList')->name('customer.wishList');
+        Route::get('payment-list', 'CustomerActionController@myPayments')->name('customer.payList');
         Route::post('add-to-wish-list/{prod_id}', 'CustomerActionController@addWish')->name('customer.addToWish');
         Route::get('remove-from-wish-list/{item_id}', 'CustomerActionController@popWish')->name('customer.pop_wish');
 

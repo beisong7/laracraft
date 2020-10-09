@@ -64,19 +64,19 @@ $navlink['contact_us'] = 'active';
                                                     @if($book->cancled)
                                                         You canceled this order
                                                     @else
-                                                        {{ $book->handled?'Treated':'Not Treated' }}
+                                                        {{ $book->handled?'Delivered':'Pending' }}
                                                     @endif
                                                 </td>
                                                 <td class="text-right">
                                                     @if($book->cancled)
 
                                                     @else
-                                                        <a href="#" onclick="event.preventDefault(); deleteThis('{{ route('customer.drop_order', $book->uuid) }}')" class="ml-3">
+                                                        <a href="#" onclick="event.preventDefault(); deleteThis('{{ route('customer.drop_order', $book->uuid) }}')" class="baby-btn baby-btn-bg">
                                                             <i class="fa fa-trash"></i> Cancel
                                                         </a>
                                                     @endif
 
-                                                    <a href="{{ route('customer.view_order', $book->uuid) }}" class="ml-3 mr-3">
+                                                    <a href="{{ route('customer.view_order', $book->uuid) }}" class="baby-btn baby-btn-bg">
                                                         <i class="fa fa-eye"></i> View Items
                                                     </a>
                                                 </td>

@@ -120,8 +120,6 @@ class RaveController extends Controller
 
                 if ($tranx->status === strtolower('attempting')) {
 
-                    $paymentId = $this->setUuid();
-
                     $amount = $tranx->amount;
 
                     $payload = [

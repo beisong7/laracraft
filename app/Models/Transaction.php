@@ -24,4 +24,8 @@ class Transaction extends Model
         'ends',
         'details',
     ];
+
+    public function book(){
+        return $this->hasOne(Booking::class, 'transaction_id', 'uuid');
+    }
 }

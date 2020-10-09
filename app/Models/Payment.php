@@ -22,4 +22,8 @@ class Payment extends Model
         'start',
         'ends',
     ];
+
+    public function transaction(){
+        return $this->hasOne(Transaction::class, 'uuid', 'transaction_id');
+    }
 }
